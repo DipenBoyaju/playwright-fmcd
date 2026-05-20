@@ -13,4 +13,5 @@ test("Verify backend room API is returning data", async ({ request }) => {
   expect(responseBody.rooms.length).toBeGreaterThan(0);
 
   console.log("Room Data:", responseBody.rooms[0]);
+  console.log("Room Data:", responseBody.rooms[0]);
 });
