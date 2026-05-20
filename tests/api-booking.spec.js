@@ -21,4 +21,5 @@ test("Verify JSONPlaceholder API returns blog posts successfully", async ({
 
   // 5. Print out the response data to your GitHub Actions stream
   console.log("Successfully fetched post title:", postData.title);
+  console.log("Successfully fetched post title:", postData.id);
 });
