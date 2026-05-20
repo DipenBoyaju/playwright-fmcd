@@ -8,7 +8,7 @@ test("Verify backend room API is returning data", async ({ request }) => {
 
   expect(response.status()).toBe(200);
 
-  const responseBody = response.json();
+  const responseBody = await response.json();
 
   expect(responseBody.rooms.length).toBeGreaterThan(0);
 

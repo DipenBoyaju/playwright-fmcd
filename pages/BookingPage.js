@@ -4,6 +4,7 @@ dotenv.config();
 
 export class BookingPage {
   constructor(page) {
+    this.page = page;
     this.firstNameInput = page.getByPlaceholder("Firstname");
     this.lastNameInput = page.getByPlaceholder("Lastname");
     this.emailInput = page.getByPlaceholder("Email");
@@ -16,7 +17,7 @@ export class BookingPage {
     await this.page.goto(process.env.UI_BASE_URL);
   }
 
-  async fillBookingForm(firstName, lastName, emailInput, phoneInput) {
+  async fillBookingForm(firstName, lastName, email, phone) {
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
     await this.emailInput.fill(email);
