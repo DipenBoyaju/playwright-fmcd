@@ -10,19 +10,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm ci
+
+      # 1. MAGIC STEP: Tell GitHub to look for cached Playwright browsers
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(npm ls @playwright/test --json | jq -r '.dependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      # 2. SMART STEP: Only install browsers if they weren't found in the cache
       - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
+
+      - name: Install Playwright System Dependencies OS
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
       - name: Run Playwright tests
         run: npx playwright test
-        env:
-          UI_BASE_URL: ${{ secrets.UI_BASE_URL }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
+      # 3. REPORT STEP: Upload the visual report if something breaks
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
