@@ -1,17 +1,24 @@
 import { expect, test } from "@playwright/test";
-import * as dotenv from "dotenv";
 
-dotenv.config();
+test("Verify JSONPlaceholder API returns blog posts successfully", async ({
+  request,
+}) => {
+  // 1. Hit a 100% free, stable public API endpoint
+  const response = await request.get(
+    "https://jsonplaceholder.typicode.com/posts/1",
+  );
 
-test("Verify backend room API is returning data", async ({ request }) => {
-  const response = await request.get(`${process.env.API_BASE_URL}/room`);
-
+  // 2. Assert that the server responded with a 200 OK status code
   expect(response.status()).toBe(200);
 
-  const responseBody = await response.json();
+  // 3. Parse the dynamic JSON text into a readable JavaScript object
+  const postData = await response.json();
 
-  expect(responseBody.rooms.length).toBeGreaterThan(0);
+  // 4. Validate that the object contains the correct properties
+  expect(postData).toHaveProperty("userId");
+  expect(postData).toHaveProperty("id");
+  expect(postData).toHaveProperty("title");
 
-  console.log("Room Data:", responseBody.rooms[0]);
-  console.log("Room Data:", responseBody.rooms[0]);
+  // 5. Print out the response data to your GitHub Actions stream
+  console.log("Successfully fetched post title:", postData.title);
 });

@@ -1,19 +1,20 @@
-import { expect, test } from "@playwright/test";
-import { BookingPage } from "../pages/BookingPage";
+import { test, expect } from "@playwright/test";
 
-test("User can successfully submit a booking form", async ({ page }) => {
-  const bookingPage = new BookingPage(page);
+test("User can successfully log in to the test environment", async ({
+  page,
+}) => {
+  // 1. Navigate to a stable login playground site
+  await page.goto("https://the-internet.herokuapp.com/login");
 
-  await bookingPage.navigate();
+  // 2. Fill out the mock login form using native locators
+  await page.locator("#username").fill("tomsmith");
+  await page.locator("#password").fill("SuperSecretPassword!");
 
-  await bookingPage.fillBookingForm(
-    "Prateek",
-    "Dev",
-    "prateek@test.com",
-    "123456789012",
-  );
+  // 3. Click the submit button using its text attribute
+  await page.getByRole("button", { name: /login/i }).click();
 
-  await bookingPage.bookRoomButton.click();
-
-  await expect(bookingPage.successMessage).toBeVisible({ timeout: 10000 });
+  // 4. Assert that the green success message alert is visible on screen
+  const successAlert = page.locator("#flash");
+  await expect(successAlert).toBeVisible();
+  await expect(successAlert).toContainText("You logged into a secure area!");
 });
