@@ -7,6 +7,6 @@ test("User can instantly view the secure internal dashboard page", async ({
   await page.goto("https://the-internet.herokuapp.com/secure");
 
   // Assert that you are already logged in automatically
-  const welcomeHeader = page.locator("h2");
+  const welcomeHeader = page.getByText("Secure Area", { exact: true });
   await expect(welcomeHeader).toHaveText("Secure Area");
 });
