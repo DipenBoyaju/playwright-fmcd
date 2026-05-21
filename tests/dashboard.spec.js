@@ -8,5 +8,5 @@ test("User can instantly view the secure internal dashboard page", async ({
 
   // Assert that you are already logged in automatically
   const welcomeHeader = page.getByText("Secure Area", { exact: true });
-  await expect(welcomeHeader).toHaveText("Secure Area");
+  await expect(welcomeHeader).toHaveText(" Secure Area");
 });
