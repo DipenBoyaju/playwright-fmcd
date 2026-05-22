@@ -1,5 +1,5 @@
 import { expect, test as setup } from "@playwright/test";
-
+import fs from "fs";
 const authFile = "playwright/.auth/user.json";
 
 setup("authenticate user and save session state", async ({ page }) => {
@@ -19,6 +19,10 @@ setup("authenticate user and save session state", async ({ page }) => {
   await expect(page.locator("#flash")).toContainText(
     "You logged into a secure area!",
   );
+
+  if (!fs.existsSync("playwright/.auth")) {
+    fs.mkdirSync("playwright/.auth", { recursive: true });
+  }
 
   await page.context().storageState({ path: authFile });
 });
