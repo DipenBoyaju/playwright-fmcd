@@ -5,8 +5,15 @@ const authFile = "playwright/.auth/user.json";
 setup("authenticate user and save session state", async ({ page }) => {
   await page.goto("https://the-internet.herokuapp.com/login");
 
-  await page.locator("#username").fill("tomsmith");
-  await page.locator("#password").fill("SuperSecretPassword!");
+  const username = process.env.TEST_USERNAME;
+  const password = process.env.TEST_PASSWORD;
+
+  if (!username || !password) {
+    throw new Error("TEST_USERNAME and TEST_PASSWORD must be set");
+  }
+
+  await page.locator("#username").fill(username);
+  await page.locator("#password").fill(password);
   await page.getByRole("button", { name: /login/i }).click();
 
   await expect(page.locator("#flash")).toContainText(

@@ -42,6 +42,7 @@ export default defineConfig({
     },
     {
       name: "chromium",
+      testMatch: /ui-booking\.spec\.js/,
       use: {
         ...devices["Desktop Chrome"],
         // Tell this browser to read the cookies before launching a test!
@@ -49,16 +50,21 @@ export default defineConfig({
       },
       dependencies: ["setup"], // Forces the setup project to run first!
     },
-
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      name: "api-tests",
+      testMatch: /api-booking\.spec\.js/,
+      use: {},
     },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
+
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
 
     /* Test against mobile viewports. */
     // {

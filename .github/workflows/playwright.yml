@@ -42,6 +42,9 @@ jobs:
         run: npx playwright install-deps
 
       - name: Run Playwright tests
+        env:
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: npx playwright test
 
       # 3. REPORT STEP: Upload the visual report if something breaks
